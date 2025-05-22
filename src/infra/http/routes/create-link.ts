@@ -1,4 +1,5 @@
 import { createLink } from '@/app/use-cases/create-link'
+import { isRight, unwrapEither } from '@/shared/either'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
@@ -9,11 +10,11 @@ export const createLinkRoute: FastifyPluginAsyncZod = async server => {
       schema: {
         summary: 'Create a link',
         body: z.object({
-          originalURL: z.string().url(),
-          shortURL: z.string(), //expressão permite letras maiusculas, minusculas, numeros e hifens
+          originalURL: z.string().url().nonempty(),
+          shortURL: z.string().nonempty(),
         }),
         response: {
-          201: z.object({ shortURL: z.string() }),
+          201: z.null().describe('Link criado'),
           400: z.object({ message: z.string() }),
         },
       },
@@ -25,9 +26,18 @@ export const createLinkRoute: FastifyPluginAsyncZod = async server => {
         return reply.status(400).send({ message: 'Link is required.' })
       }
 
-      await createLink(createdLink)
+      const result = await createLink(createdLink)
 
-      return reply.status(201).send({ shortURL: 'teste' })
+      if (isRight(result)) {
+        return reply.status(201).send()
+      }
+
+      const error = unwrapEither(result)
+
+      switch (error.constructor.name) {
+        case 'PoorlyFormattedURL':
+          return reply.status(400).send({ message: error.message })
+      }
     }
   )
 }

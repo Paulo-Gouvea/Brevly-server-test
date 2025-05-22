@@ -1,28 +1,30 @@
 import { db } from '@/infra/db'
 import { schema } from '@/infra/db/schemas'
+import { type Either, makeLeft, makeRight } from '@/shared/either'
 import { z } from 'zod'
+import { PoorlyFormattedURL } from './errors/poorly-formatted-url'
 
 const createLinkInput = z.object({
-  originalURL: z.string().url(),
-  shortURL: z.string(),
+  originalURL: z.string().url().nonempty(),
+  shortURL: z.string().nonempty(),
 })
 
 type CreateLinkInput = z.input<typeof createLinkInput>
 
-export async function createLink(input: CreateLinkInput) {
+export async function createLink(
+  input: CreateLinkInput
+): Promise<Either<PoorlyFormattedURL, { shortURL: string }>> {
   const { originalURL, shortURL } = createLinkInput.parse(input)
   const allowedFormatRegex = /^[a-zA-Z0-9-]+$/
 
-  if (originalURL.length === 0 || shortURL.length === 0) {
-    throw new Error('Campo Vazio. Por favor preencher!')
-  }
-
   if (!allowedFormatRegex.test(shortURL)) {
-    throw new Error('A URL encurtada está mal formatada. Por favor verificar!')
+    return makeLeft(new PoorlyFormattedURL())
   }
 
   await db.insert(schema.links).values({
     originalURL,
     shortURL,
   })
+
+  return makeRight({ shortURL })
 }
