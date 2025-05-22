@@ -32,6 +32,7 @@
     "fastify": "^5.3.2",
     "fastify-type-provider-zod": "^4.0.2",
     "postgres": "^3.4.7",
+    "uuidv7": "^1.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.4",
     "zod": "^3.24.4"

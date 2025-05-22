@@ -1,0 +1,72 @@
+{
+  "id": "17ab9441-2b1f-4fcf-9414-75b88dc5c58a",
+  "prevId": "2ec4a108-4ec4-473d-a7fe-53d456ca76f9",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.links": {
+      "name": "links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "original_URL": {
+          "name": "original_URL",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "short_URL": {
+          "name": "short_URL",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accessCount": {
+          "name": "accessCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "links_short_URL_unique": {
+          "name": "links_short_URL_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "short_URL"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
