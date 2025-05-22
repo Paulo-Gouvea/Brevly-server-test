@@ -1,5 +1,4 @@
-import { db } from '@/infra/db'
-import { schema } from '@/infra/db/schemas'
+import { createLink } from '@/app/use-cases/create-link'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
@@ -10,23 +9,25 @@ export const createLinkRoute: FastifyPluginAsyncZod = async server => {
       schema: {
         summary: 'Create a link',
         body: z.object({
-          name: z.string(),
+          originalURL: z.string().url(),
+          shortURL: z.string(), //expressão permite letras maiusculas, minusculas, numeros e hifens
         }),
         response: {
-          201: z.object({ linkId: z.string() }),
-          409: z
-            .object({ message: z.string() })
-            .describe('Link already exists.'),
+          201: z.object({ shortURL: z.string() }),
+          400: z.object({ message: z.string() }),
         },
       },
     },
     async (request, reply) => {
-      await db.insert(schema.links).values({
-        originalURL: 'https://odia.ig.com.br',
-        shortURL: 'odiateste5',
-      })
+      const createdLink = await request.body
 
-      return reply.status(201).send({ linkId: 'teste' })
+      if (!createdLink) {
+        return reply.status(400).send({ message: 'Link is required.' })
+      }
+
+      await createLink(createdLink)
+
+      return reply.status(201).send({ shortURL: 'teste' })
     }
   )
 }
