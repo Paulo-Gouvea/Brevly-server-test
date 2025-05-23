@@ -6,7 +6,7 @@
 - [x] Deve ser possível deletar um link (teste?)
 - [x] Deve ser possível obter a URL original por meio de uma URL encurtada (teste?)
 - [x] Deve ser possível listar todas as URL’s cadastradas (teste?)
-- [ ] Deve ser possível incrementar a quantidade de acessos de um link (teste?)
+- [x] Deve ser possível incrementar a quantidade de acessos de um link (teste?)
 - [ ] Deve ser possível exportar os links criados em um CSV (teste?)
   - [ ] Deve ser possível acessar o CSV por meio de uma CDN (Amazon S3, Cloudflare R2, etc) (teste?)
   - [ ] Deve ser gerado um nome aleatório e único para o arquivo (teste?)
