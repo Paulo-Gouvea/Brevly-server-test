@@ -16,6 +16,15 @@ server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
 
 server.setErrorHandler((error, request, reply) => {
+  if (error.code === '23505') {
+    return reply
+      .status(409)
+      .send({
+        message:
+          'Esta URL encurtada já está sendo utilizada. Por favor utilize outra!',
+      })
+  }
+
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply.status(400).send({
       message: 'Validation error',
