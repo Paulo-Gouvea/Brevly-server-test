@@ -9,6 +9,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { createLinkRoute } from './routes/create-link'
+import { getAllLinksRoute } from './routes/get-all-links'
 
 const server = fastify()
 
@@ -17,12 +18,10 @@ server.setSerializerCompiler(serializerCompiler)
 
 server.setErrorHandler((error, request, reply) => {
   if (error.code === '23505') {
-    return reply
-      .status(409)
-      .send({
-        message:
-          'Esta URL encurtada já está sendo utilizada. Por favor utilize outra!',
-      })
+    return reply.status(409).send({
+      message:
+        'Esta URL encurtada já está sendo utilizada. Por favor utilize outra!',
+    })
   }
 
   if (hasZodFastifySchemaValidationErrors(error)) {
@@ -54,7 +53,9 @@ server.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 })
 
+// rotas
 server.register(createLinkRoute)
+server.register(getAllLinksRoute)
 
 server.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
   console.log('HTTP SERVER RUNNING!')
