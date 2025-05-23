@@ -3,7 +3,7 @@
 - [x] Deve ser possível criar um link (teste?)
   - [x] Não deve ser possível criar um link com URL encurtada mal formatada (teste?)
   - [x] Não deve ser possível criar um link com URL encurtada já existente (teste?)
-- [ ] Deve ser possível deletar um link (teste?)
+- [x] Deve ser possível deletar um link (teste?)
 - [ ] Deve ser possível obter a URL original por meio de uma URL encurtada (teste?)
 - [x] Deve ser possível listar todas as URL’s cadastradas (teste?)
 - [ ] Deve ser possível incrementar a quantidade de acessos de um link (teste?)

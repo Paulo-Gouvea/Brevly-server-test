@@ -1,34 +1,32 @@
-import { deleteLink } from '@/app/use-cases/delete-link'
+import { getOriginalURL } from '@/app/use-cases/get-original-url'
 import { isRight, unwrapEither } from '@/shared/either'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-export const deleteLinkRoute: FastifyPluginAsyncZod = async server => {
-  server.delete(
-    '/links',
+export const getOriginalURLRoute: FastifyPluginAsyncZod = async server => {
+  server.get(
+    '/original_url',
     {
       schema: {
-        summary: 'Delete a link',
-        body: z.object({
+        summary: 'Get original url using short url',
+        querystring: z.object({
           shortURL: z.string().nonempty(),
         }),
         response: {
-          201: z.null().describe('Link deletado'),
+          201: z.object({
+            originalURL: z.string().nonempty(),
+          }),
           400: z.object({ message: z.string() }),
         },
       },
     },
     async (request, reply) => {
-      const deletedLink = await request.body
+      const desiredShortURL = await request.query
 
-      if (!deletedLink) {
-        return reply.status(400).send({ message: 'Link not found.' })
-      }
-
-      const result = await deleteLink(deletedLink)
+      const result = await getOriginalURL(desiredShortURL)
 
       if (isRight(result)) {
-        return reply.status(201).send()
+        return reply.status(201).send({ originalURL: result.right.originalURL })
       }
 
       const error = unwrapEither(result)

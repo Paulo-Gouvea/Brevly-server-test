@@ -11,6 +11,7 @@ import {
 import { createLinkRoute } from './routes/create-link'
 import { deleteLinkRoute } from './routes/delete-link'
 import { getAllLinksRoute } from './routes/get-all-links'
+import { getOriginalURLRoute } from './routes/get-original-url'
 
 const server = fastify()
 
@@ -58,6 +59,7 @@ server.register(fastifySwaggerUi, {
 server.register(createLinkRoute)
 server.register(getAllLinksRoute)
 server.register(deleteLinkRoute)
+server.register(getOriginalURLRoute)
 
 server.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
   console.log('HTTP SERVER RUNNING!')
