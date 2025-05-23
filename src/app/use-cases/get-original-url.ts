@@ -27,6 +27,8 @@ export async function getOriginalURL(
     .from(schema.links)
     .where(eq(schema.links.shortURL, shortURL))
 
+  console.log('desiredOriginalURL ', desiredOriginalURL[0].field1)
+
   if (desiredOriginalURL.length === 0) {
     return makeLeft(new URLNotFound())
   }
