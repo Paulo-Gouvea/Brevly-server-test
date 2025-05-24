@@ -1,1 +1,1 @@
-CREATE DATABASE link_test
+CREATE DATABASE link_test;
