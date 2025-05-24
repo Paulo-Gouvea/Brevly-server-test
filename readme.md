@@ -15,7 +15,7 @@
 
 -- Docker
 
-Para esse projeto back-end você deve construir um Dockerfile, seguindo as boas práticas, que deve ser responsável por gerar a imagem da aplicação.
+[ ] Para esse projeto back-end você deve construir um Dockerfile, seguindo as boas práticas, que deve ser responsável por gerar a imagem da aplicação.
 
 -- Dicas
 
