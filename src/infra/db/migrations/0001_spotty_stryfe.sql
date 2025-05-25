@@ -1,1 +1,0 @@
-ALTER TABLE "links" ADD CONSTRAINT "links_short_URL_unique" UNIQUE("short_URL");
