@@ -1,5 +1,6 @@
+#Comando completo dockerfile:
+# docker run -p 3000:3333 -e DATABASE_URL="postgresql://test" -e CLOUDFLARE_ACCOUNT_ID="#" -e CLOUDFLARE_ACCESS_KEY_ID="#" -e CLOUDFLARE_SECRET_ACCESS_KEY="#" -e CLOUDFLARE_BUCKET="#" -e CLOUDFLARE_PUBLIC_URL="http://localhost" -d brevly-server-test:v2
 FROM node:22.16.0 AS base
-# FROM node:22.16.0-alpine
 
 RUN npm i -g pnpm
 
@@ -29,14 +30,13 @@ COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
 
-ENV DATABASE_URL="postgresql://test"
-ENV CLOUDFLARE_ACCOUNT_ID="#"
-ENV CLOUDFLARE_ACCESS_KEY_ID="#"
-ENV CLOUDFLARE_SECRET_ACCESS_KEY="#"
-ENV CLOUDFLARE_BUCKET="#"
-ENV CLOUDFLARE_PUBLIC_URL="http://localhost"
+# ENV DATABASE_URL="postgresql://test"
+# ENV CLOUDFLARE_ACCOUNT_ID="#"
+# ENV CLOUDFLARE_ACCESS_KEY_ID="#"
+# ENV CLOUDFLARE_SECRET_ACCESS_KEY="#"
+# ENV CLOUDFLARE_BUCKET="#"
+# ENV CLOUDFLARE_PUBLIC_URL="http://localhost"
 
-# depois trocar o 3333 pela env var!!!!!!
 EXPOSE 3333  
 
 CMD ["dist/infra/http/server.js"]
