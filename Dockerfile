@@ -18,25 +18,21 @@ WORKDIR /usr/src/app
 
 COPY . .
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
+COPY tsup.config.ts ./tsup.config.ts
 
 RUN pnpm build
 RUN pnpm prune --prod 
 
-FROM gcr.io/distroless/nodejs22-debian12 AS deploy
+FROM node:22.16.0-alpine AS deploy
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./package.json
-
-# ENV DATABASE_URL="postgresql://test"
-# ENV CLOUDFLARE_ACCOUNT_ID="#"
-# ENV CLOUDFLARE_ACCESS_KEY_ID="#"
-# ENV CLOUDFLARE_SECRET_ACCESS_KEY="#"
-# ENV CLOUDFLARE_BUCKET="#"
-# ENV CLOUDFLARE_PUBLIC_URL="http://localhost"
+COPY --from=build /usr/src/app/dist/drizzle.config.js ./drizzle.config.js
+COPY --from=build /usr/src/app/src/infra/db/migrations ./dist/infra/db/migrations
 
 EXPOSE 3333  
 
-CMD ["dist/infra/http/server.js"]
+CMD ["node", "dist/infra/http/server.js"]

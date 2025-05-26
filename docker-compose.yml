@@ -1,6 +1,7 @@
 services:
   pg:
     image: bitnami/postgresql:latest
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -9,3 +10,17 @@ services:
       - POSTGRES_DB=link
     volumes:
       - "./docker:/docker-entrypoint-initdb.d"
+  app:
+    build: .
+    depends_on:
+      - pg
+    container_name: brevly-server
+    ports:
+      - 3000:3333
+    environment:
+      - DATABASE_URL=$DATABASE_URL
+      - CLOUDFLARE_ACCOUNT_ID=$CLOUDFLARE_ACCOUNT_ID
+      - CLOUDFLARE_ACCESS_KEY_ID=$CLOUDFLARE_ACCESS_KEY_ID
+      - CLOUDFLARE_SECRET_ACCESS_KEY=$CLOUDFLARE_SECRET_ACCESS_KEY
+      - CLOUDFLARE_BUCKET=$CLOUDFLARE_BUCKET
+      - CLOUDFLARE_PUBLIC_URL=$CLOUDFLARE_PUBLIC_URL
